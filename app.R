@@ -1,7 +1,6 @@
 library(shiny)
 library(shinydashboard)
 library(googlesheets4)
-library(tidyverse)
 
 genres <- c("Scifi",
             "Fantasy",
@@ -41,10 +40,7 @@ server <- function(input, output, session) {
     output$book_table <- renderTable({
         url <- "1KzLoJSakrpr3nY2KiFMOd9jn1DEwKKNbw2QibnW_aXg"
         gs4_deauth()
-        table <- read_sheet(url)
-        
-        as_tibble(table) %>%
-            mutate(across(.fns = as.character))
+        read_sheet(url, col_types = "c")
     })
 }
 
