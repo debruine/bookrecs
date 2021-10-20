@@ -28,6 +28,7 @@ ui <- dashboardPage(
                            selected = genres)
     ),
     body = dashboardBody(
+        tags$a(href="https://forms.gle/aHPtwTNvrL6L1wb17", "Add a book", target="_blank"),
         tableOutput(outputId = "book_table")
     ),
     title = "Book Recs",
