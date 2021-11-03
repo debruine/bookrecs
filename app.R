@@ -8,7 +8,13 @@ library(tidyr)
 url <- "1KzLoJSakrpr3nY2KiFMOd9jn1DEwKKNbw2QibnW_aXg"
 gs4_deauth()
 full_table <- read_sheet(url, col_types = "c") %>%
-    rename("Genre" = 4, "Location(s)" = 5)
+    rename("Genre" = 4, "Location(s)" = 5) %>%
+    mutate(id = row_number())
+
+genre_table <- full_table %>%
+    select(id, Genre) %>%
+    mutate(Genre = strsplit(Genre, split = "\\s*,\\s*")) %>%
+    unnest(cols = Genre)
 
 genres <- c("Scifi",
             "Fantasy",
@@ -52,8 +58,12 @@ server <- function(input, output, session) {
     display_table <- reactiveVal(full_table)
     
     # update visible columns in the display table ----
-    observeEvent(input$visible_cols, {
+    observe({
+        filtered_genres <- genre_table %>%
+            filter(Genre %in% input$genre)
+        
         full_table %>%
+            semi_join(filtered_genres, by = "id") %>%
             select(input$visible_cols) %>%
             display_table()
     })
