@@ -123,7 +123,7 @@ server <- function(input, output, session) {
     
     # genre_unselect_all ----
     observeEvent(input$genre_unselect_all, {
-        message("genre_unselect_"ll")
+        message("genre_unselect_all")
         
         updateCheckboxGroupInput(session = session, 
                                  inputId = "genre",
